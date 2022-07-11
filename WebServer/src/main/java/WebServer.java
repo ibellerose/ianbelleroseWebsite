@@ -130,7 +130,7 @@ class WebServer {
         ArrayList<String> filenames = new ArrayList<>();
     
         // Creating a File object for directory
-        File directoryPath = new File("www/");
+        File directoryPath = new File("html/");
         filenames.addAll(Arrays.asList(directoryPath.list()));
     
         if (filenames.size() > 0) {
