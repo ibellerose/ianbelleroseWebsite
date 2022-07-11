@@ -6,16 +6,6 @@ mainClassName = 'WebServer'
 
 task WebServer(type: JavaExec) {
   group 'http'
-  description 'Simple Http Demo'
-
-  classpath = sourceSets.main.runtimeClasspath
-
-  main = 'httpServer.WebServer'
-  standardInput = System.in
-}
-
-task FunWebServer(type: JavaExec) {
-  group 'http'
   description 'Http Web Server'
 
   classpath = sourceSets.main.runtimeClasspath
