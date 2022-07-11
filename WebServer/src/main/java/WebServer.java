@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 class WebServer {
     public static void main(String args[]) {
-        WebServer server = new WebServer(9000);
+        WebServer server = new WebServer(80);
     }
 
     public WebServer(int port) {
