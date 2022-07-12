@@ -87,10 +87,16 @@ class WebServer {
                     builder.append("\n");
                     builder.append(page);
 
-                } 
-                //TODO: add for another html page 
-                //else if (request.equalsIgnoreCase(""))
-                else {
+                }  else if(request.equalsIgnoreCase("calculator")) {
+                    // open the calculator.html
+                    File file = new File("html/calculator.html");
+
+                    // Generate response
+                    builder.append("HTTP/1.1 200 OK\n");
+                    builder.append("Content-Type: text/html; charset=utf-8\n");
+                    builder.append("\n");
+                    builder.append(new String(readFileInBytes(file)));
+                } else {
                     builder.append("HTTP/1.1 400 Bad Request\n");
                     builder.append("Content-Type: text/html; charset=utf-8\n");
                     builder.append("\n");
