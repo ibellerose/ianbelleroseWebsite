@@ -80,6 +80,9 @@ class WebServer {
                     String page = new String(readFileInBytes(new File("html/main.html")));
                     // performs a template replacement in the page
                     page = page.replace("${links}", buildFileList());
+                    // page = page.replace("/images/quote.png", buildFileList());
+                    // String img = new String(readFileInBytes(new File("html/images/quote.png")));
+                    // page = page.replace("/images/quote.png", img);
 
                     // Generate response
                     builder.append("HTTP/1.1 200 OK\n");
@@ -90,6 +93,16 @@ class WebServer {
                 }  else if(request.equalsIgnoreCase("calculator")) {
                     // open the calculator.html
                     File file = new File("html/calculator.html");
+
+                    // Generate response
+                    builder.append("HTTP/1.1 200 OK\n");
+                    builder.append("Content-Type: text/html; charset=utf-8\n");
+                    builder.append("\n");
+                    builder.append(new String(readFileInBytes(file)));
+                    
+                }  else if(request.equalsIgnoreCase("quote")) {
+                    // open the calculator.html
+                    File file = new File("html/quote.html");
 
                     // Generate response
                     builder.append("HTTP/1.1 200 OK\n");
