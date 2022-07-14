@@ -1,8 +1,16 @@
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Random;
+
+// import org.apache.commons.net.ftp.FTP;
+// import org.apache.commons.net.ftp.FTPClient;
 
 class WebServer {
     public static void main(String args[]) {
@@ -41,6 +49,15 @@ class WebServer {
         }
     }
 
+    private final static HashMap<String, String> _images = new HashMap<>() {
+        {
+          put("streets", "https://iili.io/JV1pSV.jpg");
+          put("bread", "https://iili.io/Jj9MWG.jpg");
+        }
+      };
+    
+    private Random random = new Random();
+
     public byte[] createResponse(InputStream inStream) {
 
         byte[] response = null;
@@ -66,7 +83,7 @@ class WebServer {
                     request = line.substring(firstSpace + 2, secondSpace);
                 }
             }
-            System.out.println("Finished Parsing Header");
+            System.out.println("Finished Parsing Header\n");
 
             if(request == null){
                 response = "<html>Illegal request: no GET</html>".getBytes();
@@ -79,16 +96,47 @@ class WebServer {
                     // opens the main.html file
                     String page = new String(readFileInBytes(new File("html/main.html")));
                     // performs a template replacement in the page
-                    page = page.replace("${links}", buildFileList());
+                    // page = page.replace("${links}", buildFileList());
                     // page = page.replace("/images/quote.png", buildFileList());
                     // String img = new String(readFileInBytes(new File("html/images/quote.png")));
                     // page = page.replace("/images/quote.png", img);
 
                     // Generate response
+                    // builder.append("HTTP/1.1 200 OK\n");
+                    // builder.append("Content-Type: image/png; charset=base64\n");
+                    // builder.append("\n");
+                    // builder.append(img);
+
+                    // File file = new File("html/images/quote.png");
+                    // byte[] bytes = new byte[(int)file.length()];
+                    // String encodedFile = Base64.getEncoder().encodeToString(bytes);
+                    // String img = "<img src=\"data:image/png;base64," + encodedFile + "\">";
+
+                    // page = page.replace("images/quote.png", img);
+
                     builder.append("HTTP/1.1 200 OK\n");
                     builder.append("Content-Type: text/html; charset=utf-8\n");
                     builder.append("\n");
                     builder.append(page);
+
+                } else if (request.equalsIgnoreCase("json")) {
+                    // shows the JSON of a random image and sets the header name for that image
+          
+                    // pick a index from the map
+                    int index = random.nextInt(_images.size());
+          
+                    // pull out the information
+                    String header = (String) _images.keySet().toArray()[index];
+                    String url = _images.get(header);
+          
+                    // Generate response
+                    builder.append("HTTP/1.1 200 OK\n");
+                    builder.append("Content-Type: application/json; charset=utf-8\n");
+                    builder.append("\n");
+                    builder.append("{");
+                    builder.append("\"header\":\"").append(header).append("\",");
+                    builder.append("\"image\":\"").append(url).append("\"");
+                    builder.append("}");
 
                 }  else if(request.equalsIgnoreCase("calculator")) {
                     // open the calculator.html
@@ -109,6 +157,27 @@ class WebServer {
                     builder.append("Content-Type: text/html; charset=utf-8\n");
                     builder.append("\n");
                     builder.append(new String(readFileInBytes(file)));
+                }  else if(request.contains("quote.png")) {
+                    // byte[] page = readFileInBytes(new File("html/images/quote.png"));
+                    // String encodedString = Base64.getEncoder().withoutPadding().encodeToString(page.getBytes());
+                    
+                    // String abc = "<img src=\"data:image/gif;base64,R0lGODlhCgAJAPcAAAAAAAAAMwAAZgAAmQAAzAAA/wArAAArMwArZgArmQArzAAr/wBVAABVMwBVZgBVmQBVzABV/wCAAACAMwCAZgCAmQCAzACA/wCqAACqMwCqZgCqmQCqzACq/wDVAADVMwDVZgDVmQDVzADV/wD/AAD/MwD/ZgD/mQD/zAD//zMAADMAMzMAZjMAmTMAzDMA/zMrADMrMzMrZjMrmTMrzDMr/zNVADNVMzNVZjNVmTNVzDNV/zOAADOAMzOAZjOAmTOAzDOA/zOqADOqMzOqZjOqmTOqzDOq/zPVADPVMzPVZjPVmTPVzDPV/zP/ADP/MzP/ZjP/mTP/zDP//2YAAGYAM2YAZmYAmWYAzGYA/2YrAGYrM2YrZmYrmWYrzGYr/2ZVAGZVM2ZVZmZVmWZVzGZV/2aAAGaAM2aAZmaAmWaAzGaA/2aqAGaqM2aqZmaqmWaqzGaq/2bVAGbVM2bVZmbVmWbVzGbV/2b/AGb/M2b/Zmb/mWb/zGb//5kAAJkAM5kAZpkAmZkAzJkA/5krAJkrM5krZpkrmZkrzJkr/5lVAJlVM5lVZplVmZlVzJlV/5mAAJmAM5mAZpmAmZmAzJmA/5mqAJmqM5mqZpmqmZmqzJmq/5nVAJnVM5nVZpnVmZnVzJnV/5n/AJn/M5n/Zpn/mZn/zJn//8wAAMwAM8wAZswAmcwAzMwA/8wrAMwrM8wrZswrmcwrzMwr/8xVAMxVM8xVZsxVmcxVzMxV/8yAAMyAM8yAZsyAmcyAzMyA/8yqAMyqM8yqZsyqmcyqzMyq/8zVAMzVM8zVZszVmczVzMzV/8z/AMz/M8z/Zsz/mcz/zMz///8AAP8AM/8AZv8Amf8AzP8A//8rAP8rM/8rZv8rmf8rzP8r//9VAP9VM/9VZv9Vmf9VzP9V//+AAP+AM/+AZv+Amf+AzP+A//+qAP+qM/+qZv+qmf+qzP+q///VAP/VM//VZv/Vmf/VzP/V////AP//M///Zv//mf//zP///wAAAAAAAAAAAAAAACH5BAEAAPwALAAAAAAKAAkAAAgkAPcJHLgPAEGCAAweLJhwYUOFCAdCLBhRYMKLDSkeNJgRIYCAADs=\">";
+
+                    //byte[] fileContent = Files.readFileToByteArray(new File("html/images/quote.png"));
+                    // String encodedfile = new String(Base64.encodeBase64(page), "UTF-8");
+                    File file = new File("html/images/quote.png");
+
+                    FileInputStream fileInputStreamReader = new FileInputStream(file);
+                    byte[] bytes = new byte[(int)file.length()];
+                    fileInputStreamReader.read(bytes);
+                    String encodedFile = Base64.getEncoder().encodeToString(bytes);
+                    String img = "<img src=\"data:image/png;base64," + encodedFile + "\">";
+
+                    // Generate response
+                    builder.append("HTTP/1.1 200 OK\n");
+                    builder.append("Content-Type: text/html; charset=utf-8\n");
+                    builder.append("\n");
+                    builder.append(img);
                 } else {
                     builder.append("HTTP/1.1 400 Bad Request\n");
                     builder.append("Content-Type: text/html; charset=utf-8\n");
@@ -164,4 +233,34 @@ class WebServer {
           return "No files in directory";
         }
       }
+
+    public String fetchURL(String aUrl) {
+        StringBuilder sb = new StringBuilder();
+        URLConnection conn = null;
+        InputStreamReader in = null;
+        try {
+          URL url = new URL(aUrl);
+          conn = url.openConnection();
+          if (conn != null)
+            conn.setReadTimeout(20 * 1000); // timeout in 20 seconds
+          if (conn != null && conn.getInputStream() != null) {
+            in = new InputStreamReader(conn.getInputStream(), Charset.defaultCharset());
+            BufferedReader br = new BufferedReader(in);
+            if (br != null) {
+              int ch;
+              // read the next character until end of reader
+              while ((ch = br.read()) != -1) {
+                sb.append((char) ch);
+              }
+              br.close();
+            }
+          }
+          in.close();
+        } catch (Exception ex) {
+          System.out.println("Exception in url request:" + ex.getMessage());
+        }
+        return sb.toString();
+    }
+
 }
+

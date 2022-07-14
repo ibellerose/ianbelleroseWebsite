@@ -1,6 +1,15 @@
 // set as java application
 apply plugin: 'application'
 
+// repositories  {
+//   mavencentral()
+// }
+
+// dependencies {
+//   compile group: 'commons-net', name: 'commons-net', version: '3.3'
+// }
+
+
 //define main class
 mainClassName = 'WebServer'
 
