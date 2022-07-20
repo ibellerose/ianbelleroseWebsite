@@ -93,8 +93,8 @@ class WebServer {
                 if (request.length() == 0){
                     // shows the default directory page
 
-                    // opens the main.html file
-                    String page = new String(readFileInBytes(new File("html/main.html")));
+                    // opens the index.html file
+                    String page = new String(readFileInBytes(new File("html/index.html")));
                     // performs a template replacement in the page
                     // page = page.replace("${links}", buildFileList());
                     // page = page.replace("/images/quote.png", buildFileList());
@@ -157,27 +157,105 @@ class WebServer {
                     builder.append("Content-Type: text/html; charset=utf-8\n");
                     builder.append("\n");
                     builder.append(new String(readFileInBytes(file)));
+
                 }  else if(request.contains("quote.png")) {
+                    byte[] page = readFileInBytes(new File("html/images/quote.png"));
+                    String quoteImg = new String(readFileInBytes(new File("html/images/quote.png")));
+                    // String encodedString = Base64.getEncoder().withoutPadding().encodeToString(page.getBytes());
+                    
+                    // String abc = "<img src=\"data:image/png;base64,R0lGODlhCgAJAPcAAAAAAAAAMwAAZgAAmQAAzAAA/wArAAArMwArZgArmQArzAAr/wBVAABVMwBVZgBVmQBVzABV/wCAAACAMwCAZgCAmQCAzACA/wCqAACqMwCqZgCqmQCqzACq/wDVAADVMwDVZgDVmQDVzADV/wD/AAD/MwD/ZgD/mQD/zAD//zMAADMAMzMAZjMAmTMAzDMA/zMrADMrMzMrZjMrmTMrzDMr/zNVADNVMzNVZjNVmTNVzDNV/zOAADOAMzOAZjOAmTOAzDOA/zOqADOqMzOqZjOqmTOqzDOq/zPVADPVMzPVZjPVmTPVzDPV/zP/ADP/MzP/ZjP/mTP/zDP//2YAAGYAM2YAZmYAmWYAzGYA/2YrAGYrM2YrZmYrmWYrzGYr/2ZVAGZVM2ZVZmZVmWZVzGZV/2aAAGaAM2aAZmaAmWaAzGaA/2aqAGaqM2aqZmaqmWaqzGaq/2bVAGbVM2bVZmbVmWbVzGbV/2b/AGb/M2b/Zmb/mWb/zGb//5kAAJkAM5kAZpkAmZkAzJkA/5krAJkrM5krZpkrmZkrzJkr/5lVAJlVM5lVZplVmZlVzJlV/5mAAJmAM5mAZpmAmZmAzJmA/5mqAJmqM5mqZpmqmZmqzJmq/5nVAJnVM5nVZpnVmZnVzJnV/5n/AJn/M5n/Zpn/mZn/zJn//8wAAMwAM8wAZswAmcwAzMwA/8wrAMwrM8wrZswrmcwrzMwr/8xVAMxVM8xVZsxVmcxVzMxV/8yAAMyAM8yAZsyAmcyAzMyA/8yqAMyqM8yqZsyqmcyqzMyq/8zVAMzVM8zVZszVmczVzMzV/8z/AMz/M8z/Zsz/mcz/zMz///8AAP8AM/8AZv8Amf8AzP8A//8rAP8rM/8rZv8rmf8rzP8r//9VAP9VM/9VZv9Vmf9VzP9V//+AAP+AM/+AZv+Amf+AzP+A//+qAP+qM/+qZv+qmf+qzP+q///VAP/VM//VZv/Vmf/VzP/V////AP//M///Zv//mf//zP///wAAAAAAAAAAAAAAACH5BAEAAPwALAAAAAAKAAkAAAgkAPcJHLgPAEGCAAweLJhwYUOFCAdCLBhRYMKLDSkeNJgRIYCAADs=\">";
+
+                    // byte[] fileContent = Files.readFileToByteArray(new File("html/images/quote.png"));
+                    // String encodedfile = new String(Base64.encodeBase64(page), "UTF-8");
+                    File file = new File("html/images/quote.png");
+
+                    byte[] bytes = new byte[(int)file.length()];
+
+                    FileInputStream fis = null;
+
+                    try{
+
+                        fis = new FileInputStream(file);
+
+                        fis.read(bytes);
+                    } finally{
+                        if (fis !=null)
+                            fis.close();
+                    }
+
+                    String encodedFile = Base64.getEncoder().encodeToString(bytes);
+                    String img = "<img src=\"data:image/png;base64," + encodedFile + "\">";
+
+                    // Generate response
+                    builder.append("HTTP/1.1 200 OK\n");
+                    // builder.append("accept-ranges: bytes\n");
+                    // builder.append("access-control-allow-origin: *\n");
+                    // builder.append("Content-Type: image/png;base64\n");
+                    builder.append("Content-Type: text/html\n");
+                    builder.append("\n");
+                    builder.append(img);
+
+                }  else if(request.contains("calculator.png")) {
                     // byte[] page = readFileInBytes(new File("html/images/quote.png"));
+                    String calcImg = new String(readFileInBytes(new File("html/images/calculator.png")));
                     // String encodedString = Base64.getEncoder().withoutPadding().encodeToString(page.getBytes());
                     
                     // String abc = "<img src=\"data:image/gif;base64,R0lGODlhCgAJAPcAAAAAAAAAMwAAZgAAmQAAzAAA/wArAAArMwArZgArmQArzAAr/wBVAABVMwBVZgBVmQBVzABV/wCAAACAMwCAZgCAmQCAzACA/wCqAACqMwCqZgCqmQCqzACq/wDVAADVMwDVZgDVmQDVzADV/wD/AAD/MwD/ZgD/mQD/zAD//zMAADMAMzMAZjMAmTMAzDMA/zMrADMrMzMrZjMrmTMrzDMr/zNVADNVMzNVZjNVmTNVzDNV/zOAADOAMzOAZjOAmTOAzDOA/zOqADOqMzOqZjOqmTOqzDOq/zPVADPVMzPVZjPVmTPVzDPV/zP/ADP/MzP/ZjP/mTP/zDP//2YAAGYAM2YAZmYAmWYAzGYA/2YrAGYrM2YrZmYrmWYrzGYr/2ZVAGZVM2ZVZmZVmWZVzGZV/2aAAGaAM2aAZmaAmWaAzGaA/2aqAGaqM2aqZmaqmWaqzGaq/2bVAGbVM2bVZmbVmWbVzGbV/2b/AGb/M2b/Zmb/mWb/zGb//5kAAJkAM5kAZpkAmZkAzJkA/5krAJkrM5krZpkrmZkrzJkr/5lVAJlVM5lVZplVmZlVzJlV/5mAAJmAM5mAZpmAmZmAzJmA/5mqAJmqM5mqZpmqmZmqzJmq/5nVAJnVM5nVZpnVmZnVzJnV/5n/AJn/M5n/Zpn/mZn/zJn//8wAAMwAM8wAZswAmcwAzMwA/8wrAMwrM8wrZswrmcwrzMwr/8xVAMxVM8xVZsxVmcxVzMxV/8yAAMyAM8yAZsyAmcyAzMyA/8yqAMyqM8yqZsyqmcyqzMyq/8zVAMzVM8zVZszVmczVzMzV/8z/AMz/M8z/Zsz/mcz/zMz///8AAP8AM/8AZv8Amf8AzP8A//8rAP8rM/8rZv8rmf8rzP8r//9VAP9VM/9VZv9Vmf9VzP9V//+AAP+AM/+AZv+Amf+AzP+A//+qAP+qM/+qZv+qmf+qzP+q///VAP/VM//VZv/Vmf/VzP/V////AP//M///Zv//mf//zP///wAAAAAAAAAAAAAAACH5BAEAAPwALAAAAAAKAAkAAAgkAPcJHLgPAEGCAAweLJhwYUOFCAdCLBhRYMKLDSkeNJgRIYCAADs=\">";
 
                     //byte[] fileContent = Files.readFileToByteArray(new File("html/images/quote.png"));
                     // String encodedfile = new String(Base64.encodeBase64(page), "UTF-8");
-                    File file = new File("html/images/quote.png");
+                    File file = new File("html/images/calculator.png");
 
-                    FileInputStream fileInputStreamReader = new FileInputStream(file);
                     byte[] bytes = new byte[(int)file.length()];
-                    fileInputStreamReader.read(bytes);
+
+                    FileInputStream fis = null;
+
+                    try{
+
+                        fis = new FileInputStream(file);
+
+                        fis.read(bytes);
+                    } finally{
+                        if (fis !=null)
+                            fis.close();
+                    }
+
                     String encodedFile = Base64.getEncoder().encodeToString(bytes);
                     String img = "<img src=\"data:image/png;base64," + encodedFile + "\">";
 
                     // Generate response
                     builder.append("HTTP/1.1 200 OK\n");
-                    builder.append("Content-Type: text/html; charset=utf-8\n");
+                    // builder.append("access-control-allow-origin: *\n");
+                    // builder.append("Content-Type: image/png\n");
+                    builder.append("Content-Type: text/html\n");
+                    // builder.append("Content-Length: " + (int)file.length() + "\n");
+
                     builder.append("\n");
                     builder.append(img);
+
+                }  else if(request.contains("js/randQuote.js")) {
+                    byte[] page = readFileInBytes(new File("html/js/randQuote.js"));
+                    String quoteJs = new String(readFileInBytes(new File("html/js/randQuote.js")));
+
+                    // Generate response
+                    builder.append("HTTP/1.1 200 OK\n");
+                    // builder.append("access-control-allow-origin: *\n");
+                    builder.append("Content-Type: application/javascript\n");
+                    builder.append("\n");
+                    builder.append(quoteJs);
+
+                }  else if(request.contains("css/quote.css")) {
+                    byte[] page = readFileInBytes(new File("html/css/quote.css"));
+                    String quoteCss = new String(readFileInBytes(new File("html/css/quote.css")));
+
+                    // Generate response
+                    builder.append("HTTP/1.1 200 OK\n");
+                    // builder.append("access-control-allow-origin: *\n");
+                    builder.append("Content-Type: text/css\n");
+                    builder.append("\n");
+                    builder.append(quoteCss);
+
+
                 } else {
                     builder.append("HTTP/1.1 400 Bad Request\n");
                     builder.append("Content-Type: text/html; charset=utf-8\n");
