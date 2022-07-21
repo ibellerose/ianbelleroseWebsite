@@ -235,8 +235,8 @@ class WebServer {
 
                 }  else if(request.contains("js/")) {
                     String jsScript = "";
-                    if(request.contains("/quote.js")){
-                        jsScript = new String(readFileInBytes(new File("html/js/quote.js")));
+                    if(request.contains("/randQuote.js")){
+                        jsScript = new String(readFileInBytes(new File("html/js/randQuote.js")));
                     } else if(request.contains("/calc.js")){
                         jsScript = new String(readFileInBytes(new File("html/js/calc.js")));
                     } else{
