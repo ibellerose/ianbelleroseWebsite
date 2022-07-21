@@ -233,28 +233,49 @@ class WebServer {
                     builder.append("\n");
                     builder.append(img);
 
-                }  else if(request.contains("js/randQuote.js")) {
-                    byte[] page = readFileInBytes(new File("html/js/randQuote.js"));
-                    String quoteJs = new String(readFileInBytes(new File("html/js/randQuote.js")));
+                }  else if(request.contains("js/")) {
+                    String jsScript = "";
+                    if(request.contains("/quote.js")){
+                        jsScript = new String(readFileInBytes(new File("html/js/quote.js")));
+                    } else if(request.contains("/calc.js")){
+                        jsScript = new String(readFileInBytes(new File("html/js/calc.js")));
+                    } else{
+                        builder.append("HTTP/1.1 400 Bad Request\n");
+                        builder.append("Content-Type: text/html; charset=utf-8\n");
+                        builder.append("\n");
+                        builder.append("That stylesheet does not exist");
+                    }
 
-                    // Generate response
-                    builder.append("HTTP/1.1 200 OK\n");
-                    // builder.append("access-control-allow-origin: *\n");
-                    builder.append("Content-Type: application/javascript\n");
-                    builder.append("\n");
-                    builder.append(quoteJs);
+                    if(!jsScript.equals("")){
+                        // Generate response
+                        builder.append("HTTP/1.1 200 OK\n");
+                        builder.append("Content-Type: application/javascript\n");
+                        builder.append("\n");
+                        builder.append(jsScript);
+                    }
 
-                }  else if(request.contains("css/quote.css")) {
-                    byte[] page = readFileInBytes(new File("html/css/quote.css"));
-                    String quoteCss = new String(readFileInBytes(new File("html/css/quote.css")));
+                }  else if(request.contains("css/")) {
+                    String styleSheet = "";
+                    if(request.contains("/index.css")){
+                        styleSheet = new String(readFileInBytes(new File("html/css/index.css")));
+                    } else if(request.contains("/quote.css")){
+                        styleSheet = new String(readFileInBytes(new File("html/css/quote.css")));
+                    } else if(request.contains("/calc.scss")){
+                        styleSheet = new String(readFileInBytes(new File("html/css/calc.scss")));
+                    } else{
+                        builder.append("HTTP/1.1 400 Bad Request\n");
+                        builder.append("Content-Type: text/html; charset=utf-8\n");
+                        builder.append("\n");
+                        builder.append("That stylesheet does not exist");
+                    }
 
-                    // Generate response
-                    builder.append("HTTP/1.1 200 OK\n");
-                    // builder.append("access-control-allow-origin: *\n");
-                    builder.append("Content-Type: text/css\n");
-                    builder.append("\n");
-                    builder.append(quoteCss);
-
+                    if(!styleSheet.equals("")){
+                        // Generate response
+                        builder.append("HTTP/1.1 200 OK\n");
+                        builder.append("Content-Type: text/css\n");
+                        builder.append("\n");
+                        builder.append(styleSheet);
+                    }
 
                 } else {
                     builder.append("HTTP/1.1 400 Bad Request\n");
