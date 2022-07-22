@@ -158,6 +158,16 @@ class WebServer {
                     builder.append("\n");
                     builder.append(new String(readFileInBytes(file)));
 
+                }  else if(request.equalsIgnoreCase("clock25_5")) {
+                    // open the calculator.html
+                    File file = new File("html/clock25_5.html");
+
+                    // Generate response
+                    builder.append("HTTP/1.1 200 OK\n");
+                    builder.append("Content-Type: text/html; charset=utf-8\n");
+                    builder.append("\n");
+                    builder.append(new String(readFileInBytes(file)));
+
                 }  else if(request.contains("quote.png")) {
                     byte[] page = readFileInBytes(new File("html/images/quote.png"));
                     String quoteImg = new String(readFileInBytes(new File("html/images/quote.png")));
@@ -239,6 +249,8 @@ class WebServer {
                         jsScript = new String(readFileInBytes(new File("html/js/randQuote.js")));
                     } else if(request.contains("/calc.js")){
                         jsScript = new String(readFileInBytes(new File("html/js/calc.js")));
+                    } else if(request.contains("/clock25_5.js")){
+                        jsScript = new String(readFileInBytes(new File("html/js/clock25_5.js")));
                     } else{
                         builder.append("HTTP/1.1 400 Bad Request\n");
                         builder.append("Content-Type: text/html; charset=utf-8\n");
@@ -262,6 +274,8 @@ class WebServer {
                         styleSheet = new String(readFileInBytes(new File("html/css/quote.css")));
                     } else if(request.contains("/calc.scss")){
                         styleSheet = new String(readFileInBytes(new File("html/css/calc.scss")));
+                    } else if(request.contains("/clock25_5.scss")){
+                        styleSheet = new String(readFileInBytes(new File("html/css/clock25_5.scss")));
                     } else{
                         builder.append("HTTP/1.1 400 Bad Request\n");
                         builder.append("Content-Type: text/html; charset=utf-8\n");

@@ -1,0 +1,83 @@
+
+body{
+    background-color: rgb(84, 167, 140);
+}
+
+#clock{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#title{
+    color: rgb(40, 78, 65);
+    font-size: 50px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+#clockRadius {
+    width: 250px;
+    height: 150px;
+    border-radius: 50%;
+    border-style: solid;
+    border-width: 6px;
+    border-color: rgb(40, 78, 65);
+    margin: 0 auto;
+    text-align: center;
+    background-color: rgb(68, 139, 114);
+}
+
+#clockTime{
+    position: relative;
+    top: 50%;
+    transform: translate(0, -50%);
+    font-size: 60px;
+    color: white;
+    font-weight: bold;
+}
+
+#session-label{
+    position: absolute;
+    top: 75px;
+    left: 175px;
+    font-size: 30px;
+    color: white;
+    white-space: nowrap;
+}
+
+#break-label{
+    position: absolute;
+    top: 75px;
+    right: 175px;
+    font-size: 30px;
+    color: white;
+    white-space: nowrap;
+}
+
+#button-area{
+    height: 75px;
+}
+
+button{
+    background-color:rgb(84, 167, 140);
+    border: none;
+    color: white;
+}
+
+button:hover{
+    cursor: pointer;
+    color: rgb(40, 78, 65);
+}
+
+.center{
+    position: relative;
+    left: 30%;
+    top: 5px;
+}
+
+.timer-label{
+    font-size: 30px;
+    font-weight: lighter;
+}
