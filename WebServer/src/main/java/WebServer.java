@@ -235,11 +235,11 @@ class WebServer {
 
                     // Generate response
                     builder.append("HTTP/1.1 200 OK\n");
-                    // builder.append("Content-Type: image/png\n");
-                    builder.append("Content-Type: text/html\n");
+                    builder.append("Content-Type: image/png\n");
+                    // builder.append("Content-Type: text/html\n");
 
                     builder.append("\n");
-                    builder.append(img);
+                    builder.append(bytes);
 
                 }  else if(request.contains("js/")) {
                     String jsScript = "";
