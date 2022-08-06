@@ -239,7 +239,7 @@ class WebServer {
                     // builder.append("Content-Type: text/html\n");
 
                     builder.append("\n");
-                    builder.append(file);
+                    builder.append(encodedFile);
 
                 }  else if(request.contains("js/")) {
                     String jsScript = "";
