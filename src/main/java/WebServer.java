@@ -94,7 +94,7 @@ class WebServer {
                     // shows the default directory page
 
                     // opens the index.html file
-                    String page = new String(readFileInBytes(new File("index.html")));
+                    String page = new String(readFileInBytes(new File("html/index.html")));
                     // performs a template replacement in the page
                     // page = page.replace("${links}", buildFileList());
                     // page = page.replace("/images/quote.png", buildFileList());
